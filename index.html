@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SolarMT — Viabilidade Solar Fotovoltaica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  footer {
+    margin-top: 40px;
+    padding: 30px 20px;
+    border-top: 1px solid var(--card-b);
+    text-align: center;
+    color: #7a90b8;
+    font-size: 0.9rem;
+}
+
+footer a {
+    color: var(--amber);
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+footer a:hover {
+    color: var(--amber2);
+    text-decoration: underline;
+}
+
+.footer-brand {
+    margin-bottom: 8px;
+    color: #fff;
+    font-weight: 600;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080f1e;--bg2:#0c1628;--bg3:#111e38;
+  --card:rgba(255,255,255,0.05);--card-b:rgba(255,255,255,0.09);
+  --amber:#f59e0b;--amber2:#fbbf24;--amber-bg:rgba(245,158,11,0.12);--amber-bd:rgba(245,158,11,0.3);
+  --green:#10b981;--green-bg:rgba(16,185,129,0.1);--green-bd:rgba(16,185,129,0.3);
+  --blue:#60a5fa;--blue-bg:rgba(96,165,250,0.1);--blue-bd:rgba(96,165,250,0.3);
+  --purple:#c084fc;--purple-bg:rgba(192,132,252,0.1);--purple-bd:rgba(192,132,252,0.3);
+  --text:#e8f0ff;--muted:#7a90b8;--dim:#3d5280;
+  --r:14px;--rs:8px
+}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+
+/* HEADER */
+header{
+  padding:18px 32px;display:flex;align-items:center;gap:14px;
+  background:var(--bg2);border-bottom:1px solid var(--card-b);
+  position:sticky;top:0;z-index:10
+}
+.logo-icon{
+  width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,#f59e0b,#f97316);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0
+}
+.logo-text{font-size:19px;font-weight:700}
+.logo-text span{color:var(--amber)}
+.header-tag{
+  margin-left:auto;font-size:12px;color:var(--muted);
+  background:var(--bg3);border:1px solid var(--card-b);
+  border-radius:20px;padding:4px 14px
+}
+
+/* HERO */
+.hero{text-align:center;padding:52px 24px 28px}
+.hero h1{
+  font-size:clamp(26px,5vw,42px);font-weight:700;
+  background:linear-gradient(135deg,var(--text) 30%,var(--amber));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:14px;line-height:1.2
+}
+.hero p{color:var(--muted);font-size:16px;max-width:580px;margin:0 auto 28px}
+.hero-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.badge{
+  background:var(--bg3);border:1px solid var(--card-b);
+  border-radius:20px;padding:5px 14px;font-size:12px;color:var(--muted)
+}
+
+/* STEPPER */
+.stepper{
+  display:flex;align-items:center;justify-content:center;
+  gap:0;padding:20px 24px;max-width:500px;margin:0 auto
+}
+.step{display:flex;align-items:center;gap:8px}
+.snum{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--bg3);border:1.5px solid var(--dim);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;color:var(--dim);transition:all .3s
+}
+.slabel{font-size:13px;color:var(--dim);font-weight:500;transition:color .3s}
+.step.active .snum{background:var(--amber);border-color:var(--amber);color:#08101e}
+.step.active .slabel{color:var(--amber)}
+.step.done .snum{background:var(--green);border-color:var(--green);color:#fff}
+.step.done .slabel{color:var(--green)}
+.sline{flex:1;height:1px;background:var(--dim);margin:0 10px;min-width:32px}
+
+/* CONTAINER */
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 80px}
+
+/* CARDS */
+.card{
+  background:var(--card);border:1px solid var(--card-b);
+  border-radius:var(--r);padding:28px 28px;margin-bottom:16px
+}
+.card-h{font-size:17px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.card-sub{font-size:14px;color:var(--muted);margin-bottom:22px}
+
+/* FORM */
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fgroup{display:flex;flex-direction:column;gap:5px}
+.fgroup.span2{grid-column:span 2}
+label.lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+input,select{
+  background:rgba(255,255,255,0.06);border:1px solid var(--card-b);
+  border-radius:var(--rs);padding:10px 14px;color:var(--text);
+  font-family:'Sora',sans-serif;font-size:14px;outline:none;
+  transition:border-color .2s;width:100%
+}
+input:focus,select:focus{border-color:var(--amber)}
+select option{background:#1a2744;color:var(--text)}
+.hint{font-size:11px;color:var(--dim)}
+.brow{display:flex;justify-content:flex-end;gap:12px;margin-top:24px}
+.btn{
+  padding:11px 26px;border-radius:var(--rs);
+  font-family:'Sora',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;border:none;transition:all .2s;letter-spacing:.01em
+}
+.btn-p{background:var(--amber);color:#08101e}
+.btn-p:hover{background:var(--amber2);transform:translateY(-1px)}
+.btn-s{background:transparent;color:var(--muted);border:1px solid var(--card-b)}
+.btn-s:hover{color:var(--text);background:var(--card)}
+
+/* PANELS */
+.panel{display:none}
+.panel.active{display:block;animation:fin .3s ease}
+@keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* METRICS GRID */
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+.mc{
+  border-radius:var(--r);padding:18px 20px;
+  background:var(--card);border:1px solid var(--card-b)
+}
+.mc.a{background:var(--amber-bg);border-color:var(--amber-bd)}
+.mc.g{background:var(--green-bg);border-color:var(--green-bd)}
+.mc.b{background:var(--blue-bg);border-color:var(--blue-bd)}
+.ml{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+.mv{font-size:22px;font-weight:700}
+.mc.a .mv{color:var(--amber)}
+.mc.g .mv{color:var(--green)}
+.mc.b .mv{color:var(--blue)}
+.mu{font-size:11px;color:var(--dim);margin-top:2px}
+
+/* TIR CARD */
+.tir-card{
+  display:flex;align-items:center;gap:20px;
+  background:var(--green-bg);border:1px solid var(--green-bd);
+  border-radius:var(--r);padding:20px 24px;margin-bottom:16px
+}
+.tir-icon{font-size:36px}
+.tir-val{font-size:32px;font-weight:700;color:var(--green)}
+.tir-msg{margin-left:auto;max-width:280px;font-size:13px;color:var(--muted);line-height:1.5}
+
+/* CHARTS GRID */
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* INFO BOX */
+.ibox{
+  background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.25);
+  border-radius:var(--rs);padding:14px 18px;font-size:14px;
+  color:#93c5fd;margin-bottom:16px;line-height:1.6
+}
+
+/* DISCIPLINES */
+.disc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+.dcard{border-radius:var(--rs);padding:14px;border:1px solid}
+.dcard.da{background:var(--amber-bg);border-color:var(--amber-bd)}
+.dcard.db{background:var(--blue-bg);border-color:var(--blue-bd)}
+.dcard.dg{background:var(--green-bg);border-color:var(--green-bd)}
+.dcard.dp{background:var(--purple-bg);border-color:var(--purple-bd)}
+.dcard.full{grid-column:span 2}
+.dcard h4{font-size:13px;font-weight:600;margin-bottom:5px}
+.dcard.da h4{color:var(--amber)}
+.dcard.db h4{color:var(--blue)}
+.dcard.dg h4{color:var(--green)}
+.dcard.dp h4{color:var(--purple)}
+.dcard p{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* FOOTER NOTE */
+.fnote{text-align:center;font-size:12px;color:var(--dim);margin-top:20px;padding-top:20px;border-top:1px solid var(--card-b)}
+
+@media(max-width:640px){
+  header{padding:14px 18px}
+  .hero{padding:32px 18px 20px}
+  .hero h1{font-size:26px}
+  .fg2{grid-template-columns:1fr}.fgroup.span2{grid-column:span 1}
+  .mg{grid-template-columns:1fr 1fr}
+  .cg{grid-template-columns:1fr}
+  .disc-grid{grid-template-columns:1fr}
+  .dcard.full{grid-column:span 1}
+  .tir-card{flex-wrap:wrap}
+  .tir-msg{margin-left:0;max-width:100%}
+  .card{padding:20px 18px}
+}
+
+@media print{
+  header,#stepper,.brow,.ibox{display:none!important}
+  body,*{background:white!important;color:#111!important}
+  .mv,.tir-val{color:#111!important}
+  .ml,.mu,.muted,.card-sub,.hint{color:#555!important}
+  .mc,.dcard,.tir-card,.card{border-color:#ddd!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">☀️</div>
+  <span class="logo-text">Solar<span>MT</span></span>
+  <div class="header-tag">UFMT · Seminário Integrador IV · 2026</div>
+</header>
+
+<div class="hero">
+  <h1>Calculadora de Viabilidade<br>Solar Fotovoltaica</h1>
+  <p>Descubra em minutos se a energia solar é viável para você — com análise técnica e financeira completa para a realidade do Mato Grosso.</p>
+  <div class="hero-badges">
+    <span class="badge">⚡ Física III</span>
+    <span class="badge">∫ Cálculo III</span>
+    <span class="badge">💰 Matemática Financeira</span>
+    <span class="badge">📊 Probabilidade e Estatística</span>
+    <span class="badge">🧠 Gestão do Conhecimento</span>
+  </div>
+</div>
+
+<div class="stepper" id="stepper">
+  <div class="step active" id="s1">
+    <div class="snum">1</div>
+    <span class="slabel">Consumo</span>
+  </div>
+  <div class="sline"></div>
+  <div class="step" id="s2">
+    <div class="snum">2</div>
+    <span class="slabel">Instalação</span>
+  </div>
+  <div class="sline"></div>
+  <div class="step" id="s3">
+    <div class="snum">3</div>
+    <span class="slabel">Resultados</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- STEP 1 -->
+  <div class="panel active" id="p1">
+    <div class="card">
+      <div class="card-h">⚡ Dados de Consumo</div>
+      <div class="card-sub">Preencha com as informações da sua conta de energia elétrica.</div>
+      <div class="fg2">
+        <div class="fgroup">
+          <label class="lbl">Cidade / Região</label>
+          <select id="cidade">
+            <option value="5.5">Lucas do Rio Verde</option>
+            <option value="5.6">Cuiabá</option>
+            <option value="5.6">Várzea Grande</option>
+            <option value="5.5">Rondonópolis</option>
+            <option value="5.4">Sorriso</option>
+            <option value="5.3">Sinop</option>
+            <option value="5.2">Alta Floresta</option>
+            <option value="5.4">Tangará da Serra</option>
+            <option value="5.5">Barra do Garças</option>
+            <option value="5.5">Cáceres</option>
+            <option value="5.4">Outro município do MT</option>
+          </select>
+          <span class="hint">Dados de irradiação solar do INMET/CRESESB</span>
+        </div>
+        <div class="fgroup">
+          <label class="lbl">Tipo de Propriedade</label>
+          <select id="tipo">
+            <option value="residencial">Residencial</option>
+            <option value="rural">Rural / Produtor</option>
+            <option value="comercial">Comercial / Industrial</option>
+          </select>
+        </div>
+        <div class="fgroup">
+          <label class="lbl">Consumo Médio Mensal (kWh)</label>
+          <input type="number" id="consumo" placeholder="Ex: 350" min="50" max="50000">
+          <span class="hint">Veja o valor na sua conta de luz (campo "Consumo")</span>
+        </div>
+        <div class="fgroup">
+          <label class="lbl">Tarifa de Energia (R$/kWh)</label>
+          <input type="number" id="tarifa" placeholder="0.87" step="0.01" min="0.20" max="3.00" value="0.87">
+          <span class="hint">Energisa MT residencial c/ impostos ≈ R$ 0,87/kWh</span>
+        </div>
+      </div>
+      <div class="brow">
+        <button class="btn btn-p" onclick="goStep(2)">Próximo →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="panel" id="p2">
+    <div class="card">
+      <div class="card-h">🏠 Dados de Instalação</div>
+      <div class="card-sub">Informe os detalhes do local e como pretende financiar o projeto.</div>
+      <div class="fg2">
+        <div class="fgroup">
+          <label class="lbl">Área Disponível no Telhado (m²)</label>
+          <input type="number" id="area" placeholder="Ex: 40" min="4" max="10000">
+          <span class="hint">Área com boa incidência solar, sem sombra. Cada painel ocupa ≈ 2 m²</span>
+        </div>
+        <div class="fgroup">
+          <label class="lbl">Orçamento Máximo (R$) — Opcional</label>
+          <input type="number" id="orcamento" placeholder="Deixe vazio para calcular o ideal">
+          <span class="hint">Custo médio MT: R$ 4.500/kWp instalado</span>
+        </div>
+        <div class="fgroup">
+          <label class="lbl">Modalidade de Compra</label>
+          <select id="modalidade" onchange="toggleFin()">
+            <option value="avista">À vista</option>
+            <option value="fin">Financiado (BNDES / banco)</option>
+          </select>
+        </div>
+        <div class="fgroup" id="frow" style="display:none">
+          <label class="lbl">Taxa de Juros Anual (%)</label>
+          <input type="number" id="taxa" placeholder="Ex: 10" step="0.1" min="0" max="40" value="10">
+          <span class="hint">BNDES Mais Solar: ≈ 6–8% a.a. | Bancos: 10–18% a.a.</span>
+        </div>
+        <div class="fgroup" id="prow" style="display:none">
+          <label class="lbl">Prazo do Financiamento (meses)</label>
+          <input type="number" id="prazo" placeholder="Ex: 60" min="12" max="240" value="60">
+          <span class="hint">BNDES permite até 240 meses (20 anos)</span>
+        </div>
+      </div>
+      <div class="brow">
+        <button class="btn btn-s" onclick="goStep(1)">← Anterior</button>
+        <button class="btn btn-p" onclick="calcular()">☀️ Calcular Viabilidade</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 — RESULTS -->
+  <div class="panel" id="p3">
+
+    <div class="ibox" id="ibox">...</div>
+
+    <!-- TECHNICAL METRICS -->
+    <div class="mg">
+      <div class="mc a">
+        <div class="ml">Painéis Necessários</div>
+        <div class="mv" id="r-paineis">—</div>
+        <div class="mu">painéis de 400 Wp</div>
+      </div>
+      <div class="mc a">
+        <div class="ml">Potência do Sistema</div>
+        <div class="mv" id="r-kwp">—</div>
+        <div class="mu">kilowatt-pico (kWp)</div>
+      </div>
+      <div class="mc a">
+        <div class="ml">Área Necessária</div>
+        <div class="mv" id="r-area">—</div>
+        <div class="mu">metros quadrados</div>
+      </div>
+    </div>
+
+    <!-- PRODUCTION & SAVINGS -->
+    <div class="mg">
+      <div class="mc g">
+        <div class="ml">Geração Mensal Est.</div>
+        <div class="mv" id="r-ger">—</div>
+        <div class="mu">kWh / mês</div>
+      </div>
+      <div class="mc g">
+        <div class="ml">Economia Mensal</div>
+        <div class="mv" id="r-eco">—</div>
+        <div class="mu">R$ / mês</div>
+      </div>
+      <div class="mc g">
+        <div class="ml">CO₂ Evitado (25 anos)</div>
+        <div class="mv" id="r-co2">—</div>
+        <div class="mu">toneladas de CO₂</div>
+      </div>
+    </div>
+
+    <!-- FINANCIAL METRICS -->
+    <div class="mg">
+      <div class="mc b">
+        <div class="ml">Custo do Sistema</div>
+        <div class="mv" id="r-custo">—</div>
+        <div class="mu">instalado completo</div>
+      </div>
+      <div class="mc b">
+        <div class="ml">Payback Simples</div>
+        <div class="mv" id="r-pb">—</div>
+        <div class="mu">anos para retorno</div>
+      </div>
+      <div class="mc b">
+        <div class="ml">VPL (25 anos, 6% a.a.)</div>
+        <div class="mv" id="r-vpl">—</div>
+        <div class="mu">valor presente líquido</div>
+      </div>
+    </div>
+
+    <!-- TIR -->
+    <div class="tir-card">
+      <div class="tir-icon">📈</div>
+      <div>
+        <div style="font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:4px">TIR — Taxa Interna de Retorno</div>
+        <div class="tir-val" id="r-tir">—</div>
+      </div>
+      <div class="tir-msg" id="tir-txt">A TIR representa a rentabilidade anual do investimento em energia solar.</div>
+    </div>
+
+    <!-- FINANCING (when applicable) -->
+    <div class="card" id="fin-card" style="display:none">
+      <div class="card-h">🏦 Detalhes do Financiamento</div>
+      <div class="fg2" style="margin-top:8px">
+        <div class="mc b" style="border-radius:var(--rs)">
+          <div class="ml">Parcela Mensal</div>
+          <div class="mv" id="r-pmt">—</div>
+          <div class="mu">R$ / mês</div>
+        </div>
+        <div class="mc g" style="border-radius:var(--rs)">
+          <div class="ml">Saldo Mensal Líquido</div>
+          <div class="mv" id="r-saldo">—</div>
+          <div class="mu">economia − parcela</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="cg">
+      <div class="card" style="padding:20px">
+        <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:14px">Retorno Acumulado — 25 anos</div>
+        <div style="position:relative;height:220px">
+          <canvas id="cRetorno" role="img" aria-label="Gráfico de linha do retorno acumulado do investimento solar ao longo de 25 anos">Retorno acumulado ao longo dos anos.</canvas>
+        </div>
+      </div>
+      <div class="card" style="padding:20px">
+        <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:14px">Distribuição do Custo</div>
+        <div style="position:relative;height:220px">
+          <canvas id="cPizza" role="img" aria-label="Gráfico de rosca com a distribuição dos custos do sistema solar">Distribuição percentual dos custos.</canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- MONTHLY GENERATION vs CONSUMPTION -->
+    <div class="card" style="padding:20px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:14px">Geração Mensal Estimada vs Consumo (kWh)</div>
+      <div style="position:relative;height:200px">
+        <canvas id="cMes" role="img" aria-label="Gráfico de barras comparando geração solar estimada com consumo mensal por mês do ano">Comparação entre geração e consumo.</canvas>
+      </div>
+    </div>
+
+    <!-- DISCIPLINES -->
+    <div class="card">
+      <div class="card-h">📚 Articulação com as Disciplinas do Curso</div>
+      <div class="card-sub">Como os cálculos deste sistema se relacionam com cada componente curricular:</div>
+      <div class="disc-grid">
+        <div class="dcard da">
+          <h4>⚡ Física III</h4>
+          <p>Cálculo da potência solar incidente (E = P·A·η), efeito fotoelétrico, irradiação solar por região, perdas por reflexão e temperatura dos painéis.</p>
+        </div>
+        <div class="dcard db">
+          <h4>∫ Cálculo III</h4>
+          <p>Modelagem da irradiação solar como função de múltiplas variáveis (ângulo, latitude, sazonalidade), integrais de potência e otimização do ângulo de inclinação dos painéis.</p>
+        </div>
+        <div class="dcard dg">
+          <h4>💰 Matemática Financeira</h4>
+          <p>Cálculo do VPL (Valor Presente Líquido), TIR (Taxa Interna de Retorno), payback descontado, PMT para financiamento e comparação com outras aplicações financeiras.</p>
+        </div>
+        <div class="dcard dp">
+          <h4>📊 Probabilidade e Estatística</h4>
+          <p>Análise estatística de séries históricas de irradiação solar (INMET), variabilidade da geração, intervalos de confiança para a estimativa de produção anual.</p>
+        </div>
+        <div class="dcard da full">
+          <h4>🧠 Gestão do Conhecimento</h4>
+          <p>Este sistema é, em si, um instrumento de disseminação do conhecimento técnico-científico para a comunidade. Democratiza o acesso a análises que antes dependiam de engenheiros especializados, capacitando produtores rurais, moradores e pequenas empresas a tomarem decisões fundamentadas sobre energia renovável.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="brow">
+      <button class="btn btn-s" onclick="goStep(1)">← Refazer Cálculo</button>
+      <button class="btn btn-p" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+
+    <div class="fnote">
+      Sistema SolarMT — Projeto de Extensão · Seminário Integrador IV · UFMT · Bacharelado em Ciência e Tecnologia · 2026<br>
+      Dados de irradiação: INMET / CRESESB · Licença: GNU GPL v3.0 (Software Livre)
+    </div>
+
+  </div><!-- /p3 -->
+
+</div><!-- /wrap -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let charts = {};
+
+function goStep(n) {
+  if (n === 2) {
+    const c = parseFloat(document.getElementById('consumo').value);
+    if (!c || c < 50) { alert('Informe o consumo médio mensal em kWh (mínimo 50).'); return; }
+  }
+  for (let i = 1; i <= 3; i++) {
+    document.getElementById('p'+i).classList.remove('active');
+    const s = document.getElementById('s'+i);
+    s.classList.remove('active','done');
+  }
+  document.getElementById('p'+n).classList.add('active');
+  document.getElementById('s'+n).classList.add('active');
+  for (let i = 1; i < n; i++) document.getElementById('s'+i).classList.add('done');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleFin() {
+  const fin = document.getElementById('modalidade').value === 'fin';
+  document.getElementById('frow').style.display = fin ? '' : 'none';
+  document.getElementById('prow').style.display = fin ? '' : 'none';
+}
+
+function brl(v) {
+  const abs = Math.abs(v);
+  const s = v < 0 ? '-R$ ' : 'R$ ';
+  return s + abs.toLocaleString('pt-BR', {minimumFractionDigits:0, maximumFractionDigits:0});
+}
+
+function npv(cfs, r) {
+  return cfs.reduce((s,c,t) => s + c / Math.pow(1+r, t), 0);
+}
+
+function irr(cost, annualSav, years, inf) {
+  const cfs = [-cost];
+  for (let t = 1; t <= years; t++) cfs.push(annualSav * Math.pow(1+inf, t-1));
+  let lo = -0.5, hi = 5;
+  for (let i = 0; i < 200; i++) {
+    const mid = (lo+hi)/2;
+    npv(cfs, mid) > 0 ? lo=mid : hi=mid;
+  }
+  return (lo+hi)/2;
+}
+
+function pmt(pv, r, n) {
+  if (r === 0) return pv/n;
+  const rm = r/12;
+  return pv * rm * Math.pow(1+rm, n) / (Math.pow(1+rm, n)-1);
+}
+
+// Solar generation seasonal variation (MT has relatively stable sun, slight dip in Jun/Jul)
+const sazon = [1.05,1.02,0.98,0.95,0.92,0.88,0.90,0.95,1.00,1.05,1.08,1.07];
+const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+function mkChart(id, cfg) {
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), cfg);
+}
+
+function calcular() {
+  const irrad = parseFloat(document.getElementById('cidade').value);
+  const consumo = parseFloat(document.getElementById('consumo').value);
+  const tarifa = parseFloat(document.getElementById('tarifa').value) || 0.87;
+  const areaDisp = parseFloat(document.getElementById('area').value) || 99999;
+  const orcamento = parseFloat(document.getElementById('orcamento').value) || 99999999;
+  const modalidade = document.getElementById('modalidade').value;
+
+  // Constants
+  const PANEL_KWP = 0.4;
+  const PANEL_M2  = 2.0;
+  const SYS_EFF   = 0.80;
+  const COST_KWP  = 4500;
+  const LIFE      = 25;
+  const DISC      = 0.06;
+  const INF       = 0.04;
+  const CO2_FAC   = 0.0884; // t CO2/MWh (fator emissão rede brasileira)
+
+  // Technical
+  const genPerPanelMonth = irrad * PANEL_KWP * SYS_EFF * 30;
+  let nPaineis = Math.ceil(consumo / genPerPanelMonth);
+  nPaineis = Math.min(nPaineis, Math.floor(areaDisp / PANEL_M2));
+  const custMax = Math.floor(orcamento / COST_KWP / PANEL_KWP);
+  nPaineis = Math.min(nPaineis, custMax > 0 ? custMax : nPaineis);
+  nPaineis = Math.max(nPaineis, 1);
+
+  const kwp = +(nPaineis * PANEL_KWP).toFixed(2);
+  const areaN = nPaineis * PANEL_M2;
+  const gerMes = +(nPaineis * genPerPanelMonth).toFixed(0);
+  const gerAno = gerMes * 12;
+  const co2 = +((gerAno/1000)*CO2_FAC*LIFE).toFixed(1);
+
+  // Financial
+  const custo = kwp * COST_KWP;
+  const ecoMes = +(Math.min(gerMes, consumo) * tarifa).toFixed(0);
+  const ecoAno = ecoMes * 12;
+  const payback = +(custo / ecoAno).toFixed(1);
+
+  const cfs = [-custo];
+  for (let t = 1; t <= LIFE; t++) cfs.push(ecoAno * Math.pow(1+INF, t-1));
+  const vplVal = +npv(cfs, DISC).toFixed(0);
+  const tirVal = irr(custo, ecoAno, LIFE, INF);
+
+  // Fill metrics
+  document.getElementById('r-paineis').textContent = nPaineis;
+  document.getElementById('r-kwp').textContent = kwp.toFixed(2) + ' kWp';
+  document.getElementById('r-area').textContent = areaN.toFixed(0) + ' m²';
+  document.getElementById('r-ger').textContent = gerMes;
+  document.getElementById('r-eco').textContent = 'R$ ' + ecoMes.toLocaleString('pt-BR');
+  document.getElementById('r-co2').textContent = co2 + ' t';
+  document.getElementById('r-custo').textContent = brl(custo);
+  document.getElementById('r-pb').textContent = payback + ' anos';
+  document.getElementById('r-vpl').textContent = brl(vplVal);
+  document.getElementById('r-tir').textContent = (tirVal*100).toFixed(1) + '% a.a.';
+
+  const tirPct = tirVal*100;
+  let tirTxt;
+  if (tirPct >= 15)     tirTxt = '🟢 Excelente! Supera amplamente a Selic e a maioria das aplicações financeiras.';
+  else if (tirPct >= 10) tirTxt = '🟢 Ótima rentabilidade. Superior à Selic histórica de longo prazo.';
+  else if (tirPct >= 7)  tirTxt = '🟡 Boa rentabilidade. Comparável a CDBs de longo prazo com liquidez restrita.';
+  else if (tirPct >= 4)  tirTxt = '🟡 Rentabilidade moderada. Avalie renegociar o custo de instalação.';
+  else                   tirTxt = '🔴 Baixa rentabilidade. Reduza o sistema ou busque outro orçamento.';
+  document.getElementById('tir-txt').textContent = tirTxt;
+
+  // Financing
+  if (modalidade === 'fin') {
+    const taxaA = (parseFloat(document.getElementById('taxa').value)||10)/100;
+    const prazoM = parseInt(document.getElementById('prazo').value)||60;
+    const parcela = +pmt(custo, taxaA, prazoM).toFixed(0);
+    const saldo = ecoMes - parcela;
+    document.getElementById('r-pmt').textContent = 'R$ ' + parcela.toLocaleString('pt-BR');
+    document.getElementById('r-saldo').textContent = (saldo >= 0 ? '+' : '') + brl(saldo);
+    document.getElementById('fin-card').style.display = '';
+  } else {
+    document.getElementById('fin-card').style.display = 'none';
+  }
+
+  // Info box
+  const cov = Math.min(100, Math.round(gerMes/consumo*100));
+  document.getElementById('ibox').innerHTML =
+    `✅ Com <strong>${nPaineis} painéis de 400 Wp</strong>, o sistema cobre <strong>${cov}% do seu consumo</strong> de ${consumo} kWh/mês. `+
+    `Irradiação solar local de <strong>${irrad} kWh/m²/dia</strong> — uma das maiores do Brasil.`;
+
+  // CHART 1: Retorno acumulado
+  const labRet = ['Ano 0'];
+  const retLine = [-custo];
+  let acum = -custo;
+  for (let t = 1; t <= LIFE; t++) {
+    acum += ecoAno * Math.pow(1+INF, t-1);
+    labRet.push('Ano '+t);
+    retLine.push(Math.round(acum));
+  }
+  mkChart('cRetorno', {
+    type:'line',
+    data:{
+      labels:labRet,
+      datasets:[{
+        label:'Retorno Acumulado (R$)',
+        data:retLine,
+        borderColor:'#f59e0b',
+        backgroundColor:'rgba(245,158,11,0.08)',
+        fill:true,tension:0.3,borderWidth:2,pointRadius:0
+      },{
+        label:'Zero',
+        data:Array(LIFE+1).fill(0),
+        borderColor:'rgba(255,255,255,0.15)',
+        borderDash:[4,4],borderWidth:1,pointRadius:0
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:'#7a90b8',font:{size:10},maxTicksLimit:7},grid:{color:'rgba(255,255,255,0.04)'}},
+        y:{ticks:{color:'#7a90b8',font:{size:10},callback:v=>(v<0?'-':'')+'R$'+Math.round(Math.abs(v)/1000)+'k'},grid:{color:'rgba(255,255,255,0.04)'}}
+      }
+    }
+  });
+
+  // CHART 2: Donut - custo breakdown
+  mkChart('cPizza', {
+    type:'doughnut',
+    data:{
+      labels:['Equipamentos 60%','Projeto/Inst. 25%','Mão de obra 15%'],
+      datasets:[{data:[custo*.60,custo*.25,custo*.15],backgroundColor:['#f59e0b','#60a5fa','#10b981'],borderWidth:0}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{position:'bottom',labels:{color:'#7a90b8',font:{size:11},padding:10,boxWidth:10}}}
+    }
+  });
+
+  // CHART 3: Monthly generation vs consumption
+  const gerMeses = sazon.map(f => Math.round(gerMes * f));
+  mkChart('cMes', {
+    type:'bar',
+    data:{
+      labels:meses,
+      datasets:[
+        {label:'Geração Est.',data:gerMeses,backgroundColor:'rgba(245,158,11,0.7)',borderRadius:4},
+        {label:'Consumo',data:Array(12).fill(+consumo),backgroundColor:'rgba(96,165,250,0.4)',borderRadius:4,borderDash:[]}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#7a90b8',font:{size:11},boxWidth:10}}},
+      scales:{
+        x:{ticks:{color:'#7a90b8',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}},
+        y:{ticks:{color:'#7a90b8',font:{size:11},callback:v=>v+' kWh'},grid:{color:'rgba(255,255,255,0.04)'}}
+      }
+    }
+  });
+
+  goStep(3);
+}
+</script>
+<footer>
+    <div class="footer-brand">SolarMT — Lucas do Rio Verde/MT</div>
+    <p>
+        Criado por <a href="https://www.instagram.com/_atlaskennedydc" target="_blank">Atlas Kennedy</a> 
+        — Graduando em Ciência e Tecnologia UFMT — Universidade Federal de Mato Grosso
+    </p>
+    <p style="margin-top: 5px; opacity: 0.8; font-size: 0.8rem;">
+         GNU GPL v3.0 (Software Livre)
+    </p>
+</footer>
+</body>
+</html>
